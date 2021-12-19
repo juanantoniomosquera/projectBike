@@ -1,0 +1,26 @@
+version: '2'
+
+services:
+  mariadb:
+    image: docker.io/bitnami/mariadb:10.3
+    environment:
+      # ALLOW_EMPTY_PASSWORD is recommended only for development.
+      - ALLOW_EMPTY_PASSWORD=yes
+      - MARIADB_USER=growpro
+      - MARIADB_DATABASE=growpro
+  myapp:
+    image: docker.io/bitnami/symfony:4.4
+    ports:
+      - '8000:8000'
+    environment:
+      # ALLOW_EMPTY_PASSWORD is recommended only for development.
+      - ALLOW_EMPTY_PASSWORD=yes
+      - SYMFONY_DATABASE_HOST=mariadb
+      - SYMFONY_DATABASE_PORT_NUMBER=3306
+      - SYMFONY_DATABASE_USER=growpro
+      - SYMFONY_DATABASE_NAME=growpro
+    volumes:
+      - './my-project:/app'
+    depends_on:
+      - mariadb
+
